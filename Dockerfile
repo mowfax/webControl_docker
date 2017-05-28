@@ -14,6 +14,10 @@ RUN apt-get autoremove -y
 COPY sudoers /etc/sudoers
 RUN adduser www-data sudo
 
+RUN mv /etc/php/7.0/apache2/php.ini /etc/php/7.0/apache2/php_org.ini
+RUN sed -e 's:upload_max_filesize = 2M:upload_max_filesize = 100M:' \
+        -e 's:post_max_size = 8M:post_max_size = 100M:' /etc/php/7.0/apache2/php_org.ini > /etc/php/7.0/apache2/php.ini
+
 COPY ./docker-entrypoint.sh /
 
 ENTRYPOINT ["/bin/bash"]
