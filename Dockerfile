@@ -2,7 +2,7 @@ FROM ubuntu:16.04
 
 MAINTAINER mowfax
 
-EXPOSE 443/tcp 34290-34299/udp
+EXPOSE 443/tcp
 
 ENV PORT_PREFIX=3429 \
     ADMINUSER=admin \
