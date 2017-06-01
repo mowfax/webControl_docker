@@ -4,7 +4,8 @@ MAINTAINER mowfax
 
 EXPOSE 443/tcp 34290-34299/udp
 
-ENV PORT_PREFIX=3419
+ENV PORT_PREFIX=3419 \
+    ADMINUSER=admin \
     ADMINPASS=password
 
 RUN apt-get update -y && apt-get install -y curl
