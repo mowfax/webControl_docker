@@ -1,10 +1,36 @@
-#!/bin/sh -x
+#!/bin/bash
 
-set -e
+##Define cleanup procedure
+cleanup() {
+    echo "Container stopped, performing cleanup..."
+	
+	#shutdown all running factorio instances gracefully
+    killall factorio
+    
+    #save discord channel settings
+    if [ -f /tmp/host/savedata.json ]; then
+        cp /var/www/factorio/savedata.json /tmp/host/
+    fi
+	
+    #copy logfiles from container to host if debugging is necessary
+    mkdir /tmp/host/systemlog
+    mkdir /tmp/host/factoriolog
+    rm -rf /tmp/host/systemlog/*
+    rm -rf /tmp/host/factoriolog/*
+    cp -R /var/log/* /tmp/host/systemlog/
+    cp -R /var/www/factorio/logs/* /tmp/host/factoriolog/
+}
+
+##Trap SIGTERM
+trap cleanup SIGTERM
+
+##Startup
 
 #copy personal discord-bot information into container
 cp /tmp/host/config.json /var/www/factorio/
-cp /tmp/host/savedata.json /var/www/factorio/
+if [ -f /tmp/host/savedata.json ]; then
+        cp /tmp/host/savedata.json /var/www/factorio/
+fi
 chown -R www-data:www-data /var/www/factorio
 
 #change default port range
@@ -15,26 +41,14 @@ sed -e "s:3429:$PORT_PREFIX:" /var/www/factorio/manage_org.sh > /var/www/factori
 a=$(echo -n $ADMINPASS | md5sum | awk '{ print $1 }')
 echo "$ADMINUSER|$a|admin" > /var/www/users.txt;
 
-#start apache service and get its process line
+#start apache2
+service apache2 stop
+rm -rf /var/run/apache2/apache2.pid
 service apache2 start
-a=$(ps -A | grep apache2)
 
-#keep container running as long as apache2 is running
-while [ "$a" ]; do
-        sleep 1000;
-        a=$(ps -A | grep apache2);
-done
+##Wait
+p=$(cat /var/run/apache2/apache2.pid)
+wait $p
 
-#shutdown all running factorio instances gracefully
-killall factorio
-
-#save discord channel settings
-cp /var/www/factorio/savedata.json /tmp/host/
-
-#copy logfiles from container to host if debugging is necessary
-mkdir /tmp/host/systemlog
-mkdir /tmp/host/factoriolog
-rm -rf /tmp/host/systemlog/*
-rm -rf /tmp/host/factoriolog/*
-cp -R /var/log/* /tmp/host/systemlog/
-cp -R /var/www/factorio/logs/* /tmp/host/factoriolog/
+##Cleanup
+cleanup
