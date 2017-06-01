@@ -26,5 +26,5 @@ RUN sed -e 's:upload_max_filesize = 2M:upload_max_filesize = 100M:' \
 
 COPY ./docker-entrypoint.sh /
 
-ENTRYPOINT ["/bin/bash"]
-CMD ["/docker-entrypoint.sh"]
+#ENTRYPOINT ["/bin/bash"]
+CMD ["/bin/bash","/docker-entrypoint.sh"]
