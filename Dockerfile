@@ -4,8 +4,14 @@ MAINTAINER mowfax
 
 EXPOSE 443/tcp 34290-34299/udp
 
+ENV PORT_PREFIX=3429 \
+    ADMINUSER=admin \
+    ADMINPASS=password
+
 RUN apt-get update -y && apt-get install -y curl
-RUN curl -s https://raw.githubusercontent.com/3RaGaming/Web_Control/master/install.sh > /install.sh
+# RUN curl -s https://raw.githubusercontent.com/3RaGaming/Web_Control/master/install.sh > /install.sh
+RUN curl -s https://raw.githubusercontent.com/mowfax/Web_Control/patch-1/install.sh > /install.sh
+
 RUN chmod +x /install.sh
 RUN /install.sh --silent
 
