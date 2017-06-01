@@ -42,13 +42,12 @@ a=$(echo -n $ADMINPASS | md5sum | awk '{ print $1 }')
 echo "$ADMINUSER|$a|admin" > /var/www/users.txt;
 
 #start apache2
-service apache2 stop
-rm -rf /var/run/apache2/apache2.pid
 service apache2 start
 
 ##Wait
-p=$(cat /var/run/apache2/apache2.pid)
-wait $p
+while [ -e /var/run/apache2/apache2.pid ]; do
+	sleep 1000
+done
 
 ##Cleanup
 cleanup
