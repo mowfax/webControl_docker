@@ -46,7 +46,7 @@ service apache2 start
 
 ##Wait
 while [ -e /var/run/apache2/apache2.pid ]; do
-	sleep 1000
+	sleep 1;
 done
 
 ##Cleanup
