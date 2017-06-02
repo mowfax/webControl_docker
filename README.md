@@ -1,4 +1,4 @@
-# webControl_docker
+# mowfax/factoriowebcontrol [![](https://images.microbadger.com/badges/image/mowfax/factoriowebcontrol.svg)](https://microbadger.com/images/mowfax/factoriowebcontrol "Get your own image badge on microbadger.com") [![Docker Pulls](https://img.shields.io/docker/pulls/mowfax/factoriowebcontrol.svg)](https://hub.docker.com/r/mowfax/factoriowebcontrol/) [![Docker Stars](https://img.shields.io/docker/stars/mowfax/factoriowebcontrol.svg)](https://hub.docker.com/r/mowfax/factoriowebcontrol/)
 dockerized version of 3Ra webControl for factorio:
 https://github.com/3RaGaming/Web_Control
 
